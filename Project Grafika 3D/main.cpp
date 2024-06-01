@@ -28,11 +28,13 @@ void init() {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST); // Enable depth testing for 3D rendering
     glEnable(GL_DEPTH_BUFFER_BIT);
+    //glEnable(GL_NORMALIZE);
+    glEnable(GL_SMOOTH);
     // Tekstur 1 (kayu penyangga)
     int width, height, channels;
-    unsigned char* image = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/Project Grafika 3D/texture/wood.jpg", &width, &height, &channels, STBI_rgb_alpha);
+    unsigned char* image = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/realwood.jpg", &width, &height, &channels, STBI_rgb_alpha);
     if (image == NULL) {
-        printf("Error loading texture\n");
+        printf("Error loading texture 1\n");
         exit(1);
     }
     glGenTextures(1, &texture1);
@@ -49,7 +51,7 @@ void init() {
 
     //tekstur 2 (lantai)
      int width2, height2, channels2;
-    unsigned char* image2 = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/Project Grafika 3D/texture/darkwood.jpg", &width2, &height2, &channels2, STBI_rgb_alpha);
+    unsigned char* image2 = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/realdarkwood2.jpg", &width2, &height2, &channels2, STBI_rgb_alpha);
     if (image2 == NULL) {
         printf("Error loading texture 2\n");
         exit(1);
@@ -69,9 +71,9 @@ void init() {
 
     //tekstur 3(rumput)
     int width3, height3, channels3;
-    unsigned char* image3 = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/Project Grafika 3D/texture/Lgrass.jpg", &width3, &height3, &channels3, STBI_rgb_alpha);
+    unsigned char* image3 = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/Lgrass2.jpg", &width3, &height3, &channels3, STBI_rgb_alpha);
     if (image3 == NULL) {
-        printf("Error loading texture 2\n");
+        printf("Error loading texture 3\n");
         exit(1);
     }
     glGenTextures(1, &texture3);
@@ -86,9 +88,9 @@ void init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
      int width4, height4, channels4;
-    unsigned char* image4 = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/Project Grafika 3D/texture/birch.jpg", &width4, &height4, &channels4, STBI_rgb_alpha);
+    unsigned char* image4 = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/birch.jpg", &width4, &height4, &channels4, STBI_rgb_alpha);
     if (image4 == NULL) {
-        printf("Error loading texture 2\n");
+        printf("Error loading texture 4\n");
         exit(1);
     }
 
@@ -105,9 +107,9 @@ void init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
      int width5, height5, channels5;
-    unsigned char* image5 = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/3D World Project/texture/wheat.jpg", &width5, &height5, &channels5, STBI_rgb_alpha);
+    unsigned char* image5 = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/wheat.jpg", &width5, &height5, &channels5, STBI_rgb_alpha);
     if (image5 == NULL) {
-        printf("Error loading texture 2\n");
+        printf("Error loading texture 5\n");
         exit(1);
     }
 
@@ -123,7 +125,7 @@ void init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
      int width6, height6, channels6;
-    unsigned char* image6 = stbi_load("C:/Users/andri/Documents/codingan oe/OpenGl CPP/3D World Project/texture/blacktexture.jpg", &width6, &height6, &channels6, STBI_rgb_alpha);
+    unsigned char* image6 = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/darkwoodmeja.jpg", &width6, &height6, &channels6, STBI_rgb_alpha);
     if (image6 == NULL) {
         printf("Error loading texture 2\n");
         exit(1);
@@ -140,21 +142,27 @@ void init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    //Mengaktifkan pencahayaan
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0); // satu sumber cahaya
+    glEnable(GL_LIGHT0);
 
-    // Set up Sumber cahaya
-    GLfloat light_position[] = { 3.0, 3.0, 0.0, 0.5 }; // Posisi Cahaya (x, y, z, w)
+    GLfloat lightAmbient[] = { 0.3f, 0.3f, 0.3f, 1.0f };  // Ambient light
+    GLfloat lightDiffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };  // Diffuse light
+    GLfloat lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // Specular light
 
-// Define the diffuse and ambient light colors
-    GLfloat light_diffuse[] = { 0.05, 0.05, 0.05, 1.0 }; // Diffuse color (r, g, b, a)
-    GLfloat light_ambient[] = { 1, 1, 1, 1}; // Ambient color (r, g, b, a)
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
 
-// Set Properti Cahaya
-glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    // Define material properties
+    GLfloat matAmbient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+    GLfloat matDiffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat matSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+
 }
 
 void drawmaincube(GLuint texture) {
@@ -578,11 +586,14 @@ gluLookAt(cameraX,cameraY,cameraZ,
           angleY,angleX,0,
           0,1,0);
 
+  GLfloat lightPosition[] = { 5.0f, 5.0f, 5.0f, 1.0f }; // Light position above the object
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
 drawrumput();
 drawlantai();
 drawpenyangga();
 drawatap();
-drawline();
+//drawline();
 drawstep();
 drawkursi();
 drawtable();
@@ -617,7 +628,7 @@ void mouseButton(int button, int state, int x, int y) {
     }
 }
 void reshape(int width, int height){
-glClearColor(4.0/255.0,99.0/255.0,202.0/255.0,0);
+//glClearColor(4.0/255.0,99.0/255.0,202.0/255.0,0);
 glViewport(0,0,width,height);
 glMatrixMode(GL_PROJECTION);
 glLoadIdentity();
@@ -641,3 +652,4 @@ glutMouseFunc(mouseButton);
 glutMainLoop();
 return 0;
 }
+
