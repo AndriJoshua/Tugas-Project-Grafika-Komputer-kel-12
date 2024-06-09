@@ -28,8 +28,12 @@ void init() {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST); // Enable depth testing for 3D rendering
     glEnable(GL_DEPTH_BUFFER_BIT);
-    //glEnable(GL_NORMALIZE);
+    glEnable(GL_NORMALIZE);
     glEnable(GL_SMOOTH);
+
+    // Atur hint untuk anti-aliasing
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
     // Tekstur 1 (kayu penyangga)
     int width, height, channels;
     unsigned char* image = stbi_load("C:/Users/andri/Documents/codingan oe/Project 3D World/texture/realwood.jpg", &width, &height, &channels, STBI_rgb_alpha);
@@ -248,10 +252,12 @@ glPopMatrix();
 }
 
 void drawpenyangga(){
+//note:
 // posisi y = 1.tiap y naik 1 maka penyangga nambah 0.4 dari sumbu x sehingga
 //1 = 0.4 dengan perbandingan 1/0.4 = x/0.02 didapat hasil 0.05 jadi 1 + 0.05 = 1.05
 //0.02 didapat dari lantai yang skala tinggi dibuat 0.04 dengan translasi 0 sehingga
 //diambil setengah bagian atasnya yaitu 0.02
+
 //penyangga kanan
 for (int i = 0; i < 3; i++) {
     float z = 29 - i * 29;
@@ -549,6 +555,19 @@ drawmaincube(texture6);
 glPopMatrix();
 }
 
+void drawbayangan(){
+    glDisable(GL_LIGHTING);
+    glBegin(GL_QUADS);
+    glColor4f(0,1,0,0);
+    glVertex3f(-1.80,-0.15,1.70);
+    glVertex3f(1.75,-0.15,1.75);
+    glVertex3f(1.75,-0.15,-1.8);
+    glVertex3f(-2.2,-0.15,-2.2);
+
+    glEnd();
+    glEnable(GL_LIGHTING);
+}
+
 void keyboardfunc(unsigned char key, int x ,int y){
 switch (key) {
     case 'i':
@@ -586,7 +605,7 @@ gluLookAt(cameraX,cameraY,cameraZ,
           angleY,angleX,0,
           0,1,0);
 
-  GLfloat lightPosition[] = { 5.0f, 5.0f, 5.0f, 1.0f }; // Light position above the object
+  GLfloat lightPosition[] = { 5.0f, 5.0f, 5.0f, 1.0f };
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
 drawrumput();
@@ -600,6 +619,7 @@ drawtable();
 mejadepan();
 drawpapantulis();
 //drawcube();
+drawbayangan();
 
 
 glutSwapBuffers();
@@ -638,7 +658,7 @@ glMatrixMode(GL_MODELVIEW);
 
 int main(int argc, char**argv){
 glutInit(&argc, argv);
-glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH| GLUT_MULTISAMPLE);
 glutInitWindowSize(800,600);
 glutCreateWindow("Project 3D");
 init();
